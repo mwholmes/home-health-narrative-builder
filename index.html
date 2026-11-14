@@ -1,0 +1,693 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Build a home health nursing narrative from reusable sentences for patient assessment, wound care, education, and homebound status.">
+<title>Visit Notes — Home Health Narrative Builder</title>
+<style>
+:root{--ink:#202e29;--muted:#69766f;--green:#234d40;--light:#eaf0e9;--line:#dce3dc;--paper:#fff;--bg:#f5f6f1;--accent:#d6aa68;--red:#a3443b}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}button,input,textarea,select{font:inherit}button,a,input,textarea,select{-webkit-tap-highlight-color:transparent}button,a,select{touch-action:manipulation}button{cursor:pointer}button:disabled{opacity:.35;cursor:default}button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid #b8a069;outline-offset:3px}button{border:0}a{color:inherit}svg{width:19px;height:19px;flex-shrink:0;vertical-align:middle;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}.app{display:grid;grid-template-columns:218px minmax(0,1fr);min-height:100vh}.sidebar{background:var(--green);color:#fff;padding:30px 19px;display:flex;flex-direction:column;position:sticky;top:0;height:100vh}.brand{display:flex;gap:11px;align-items:center;padding:0 8px 28px}.brandmark{width:37px;height:37px;border-radius:11px;background:#e9cb96;color:var(--green);display:grid;place-items:center}.brand strong{display:block;font-size:21px;font-weight:650;letter-spacing:-.6px}.brand small{font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:#c6d7ce}.eyebrow{font-size:10px;text-transform:uppercase;letter-spacing:1.4px;font-weight:700;color:var(--muted)}.sidebar .eyebrow{color:#a8c0b3;padding:8px 10px 12px}.categories{display:flex;flex-direction:column;gap:5px}.category{background:transparent;color:#dce7df;text-align:left;padding:11px 10px;border-radius:7px;display:flex;align-items:center;gap:9px;font-size:12px;width:100%}.category:hover{background:#ffffff0c}.category.active{background:#f1f4ec;color:#234d40;font-weight:650}.category .count{margin-left:auto;font-size:10px;opacity:.65}.side-bottom{margin-top:auto;padding:30px 10px 0}.private-indicator{font-size:12px;display:flex;gap:7px;align-items:center;color:#d9e5dd}.side-bottom p{font-size:11px;color:#b8cfc0;line-height:1.7;margin:9px 0 20px}.side-bottom a{font-size:11px;color:#dfebe0;text-underline-offset:4px}.workspace{padding:31px 35px 24px;max-width:1600px;width:100%;margin:auto}.topline{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:10px}.small-btn{display:inline-flex;gap:7px;align-items:center;border:1px solid var(--line);border-radius:7px;background:transparent;padding:7px 10px;color:var(--muted);font-size:12px}.small-btn:hover{background:#e9eee6;color:var(--ink)}h1{font-size:29px;letter-spacing:-1px;line-height:1.2;margin:0 0 10px;font-weight:630}.intro{color:var(--muted);font-size:13px;margin:0}.page-head{margin-bottom:24px}.steps{display:flex;gap:22px;align-items:center;margin:21px 0 0;font-size:11px;color:var(--muted)}.steps span{display:flex;align-items:center;gap:6px}.steps i{font-style:normal;border:1px solid #d5ded2;border-radius:50%;height:19px;width:19px;display:grid;place-items:center;font-size:10px;background:white;color:var(--green)}.columns{display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr);gap:20px;align-items:start}.panel{background:#fff;border:1px solid var(--line);border-radius:11px;overflow:hidden;box-shadow:0 3px 12px #24342603}.library-tools{padding:19px 19px 15px;border-bottom:1px solid var(--line)}.search{position:relative}.search svg{position:absolute;left:12px;top:12px;color:#8a958d;width:17px}.search input{width:100%;padding:10px 32px 10px 36px;border:1px solid var(--line);border-radius:7px;background:#fbfcf9;font-size:12px;color:var(--ink)}.search input::placeholder{color:#8a938d}.search-clear{position:absolute;right:5px;top:6px;background:transparent;color:var(--muted);padding:4px}.library-heading{padding:18px 20px 13px;display:flex;align-items:start;justify-content:space-between;gap:10px}.library-heading h2{font-size:17px;letter-spacing:-.3px;margin:0 0 5px}.library-heading p{font-size:12px;color:var(--muted);margin:0;line-height:1.6}.total-pill{background:var(--light);border-radius:5px;white-space:nowrap;font-size:10px;color:var(--green);padding:3px 7px;margin-top:3px}.sentence-list{padding:0 12px 14px;max-height:calc(100vh - 361px);min-height:330px;overflow:auto;scrollbar-width:thin;scrollbar-color:#ced9cf transparent}.sentence{display:flex;align-items:center;gap:14px;background:#fff;color:var(--ink);text-align:left;width:100%;padding:13px 9px;border-bottom:1px solid #e9ede6;font-size:12px;line-height:1.7;border-radius:4px}.sentence:last-child{border:0}.sentence:hover{background:#f3f6ef}.sentence .plus{border:1px solid #d6e1d4;border-radius:50%;height:24px;width:24px;flex-shrink:0;display:grid;place-items:center;color:#45674a;margin-left:auto}.sentence:hover .plus{background:var(--green);color:white;border-color:var(--green)}.sentence .plus svg{width:13px;height:13px}.sentence.selected .plus{background:var(--light);color:var(--green)}.blank-marker{color:#8b9d87;letter-spacing:-1px;white-space:nowrap}.result-cat{display:block;font-size:9px;text-transform:uppercase;letter-spacing:.9px;color:var(--muted);margin-bottom:4px}.no-results{padding:45px 20px;text-align:center;color:var(--muted)}.draft-head{padding:19px 20px 15px;border-bottom:1px solid var(--line)}.draft-title{display:flex;align-items:center;justify-content:space-between;gap:8px}.draft-title h2{font-size:17px;margin:0;letter-spacing:-.3px;display:flex;gap:8px;align-items:center}.draft-title .badge{font-size:10px;border-radius:20px;background:var(--light);padding:2px 7px;font-weight:500;color:var(--green)}.text-button{padding:4px 0;background:transparent;font-size:11px;color:var(--muted);text-decoration:underline;text-underline-offset:3px}.draft-sub{font-size:11px;color:var(--muted);margin-top:6px}.draft-scroll{max-height:calc(100vh - 418px);min-height:273px;overflow:auto;scrollbar-width:thin;scrollbar-color:#ced9cf transparent}.empty{padding:42px 30px 25px;text-align:center}.empty-icon{height:52px;width:52px;display:grid;place-items:center;border:1px solid #dfe6db;background:#f5f7f1;border-radius:15px;margin:0 auto 17px;color:#789070}.empty-icon svg{height:24px;width:24px}.empty h3{margin:0 0 8px;font-size:18px;font-weight:570;letter-spacing:-.4px}.empty p{font-size:12px;color:var(--muted);max-width:250px;margin:0 auto;line-height:1.8}.empty .or{display:flex;align-items:center;gap:10px;font-size:10px;color:#8b968d;margin:25px 0 13px}.empty .or:before,.empty .or:after{content:"";height:1px;background:var(--line);flex:1}.starters{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}.starter{border:1px solid var(--line);background:white;padding:8px 12px;font-size:11px;border-radius:6px;color:var(--green)}.starter:hover{background:var(--light)}.draft-item{padding:15px 17px;border-bottom:1px solid #e6ebe3}.item-top{display:flex;align-items:center;gap:7px;margin-bottom:8px}.item-number{font-size:10px;color:var(--muted);background:#eff3eb;border-radius:4px;padding:1px 5px}.item-category{font-size:9px;color:var(--muted);letter-spacing:.6px;text-transform:uppercase}.item-controls{display:flex;gap:3px;margin-left:auto}.icon-btn{background:transparent;color:#7d8a81;padding:3px;border-radius:4px}.icon-btn svg{width:14px;height:14px}.icon-btn:hover{background:#edf2e8;color:var(--green)}.icon-btn.remove:hover{color:var(--red);background:#faeeeb}.sentence-fields{font-size:12px;line-height:2.5;overflow-wrap:anywhere}.detail-input{border:0;border-bottom:1px solid #b4c6ac;border-radius:3px 3px 0 0;background:#f3f7ed;color:#243b26;min-width:8ch;max-width:100%;width:12ch;padding:2px 5px;line-height:1.7;font-size:12px;margin:0 2px}.detail-input::placeholder{color:#94a28d;font-size:10px}.detail-input.filled{background:#f4f7f0;border-color:#aabda2}.draft-bottom{padding:15px 18px 17px;background:#fcfdf9}.add-custom{font-size:11px;color:var(--green);background:transparent;display:flex;align-items:center;gap:5px;padding:3px 0 15px}.add-custom svg{width:14px;height:14px}.note-stats{display:flex;justify-content:space-between;gap:8px;color:var(--muted);font-size:10px;margin-bottom:12px}.blanks-badge{color:#8e682e}.output-actions{display:flex;gap:8px}.primary{display:flex;align-items:center;justify-content:center;gap:8px;background:var(--green);color:white;border:1px solid var(--green);border-radius:7px;padding:10px 15px;font-size:12px;font-weight:560}.primary:hover{background:#183d31}.secondary{background:white;border:1px solid var(--line);border-radius:7px;padding:10px 13px;color:var(--ink);font-size:12px}.secondary:hover{background:var(--light)}.output-actions .primary{flex:1}.output-actions .secondary{flex:1}.under-note{font-size:10px;line-height:1.6;color:var(--muted);margin:13px 0 0;text-align:center}.footer{margin-top:19px;display:flex;justify-content:space-between;gap:15px;font-size:10px;color:#7b867c}.footer button{background:transparent;color:var(--muted);font-size:10px;text-decoration:underline;text-underline-offset:3px;padding:0}.mobile-categories{display:none}dialog{border:1px solid var(--line);border-radius:12px;padding:0;max-width:680px;width:calc(100% - 32px);color:var(--ink);box-shadow:0 20px 100px #0003;max-height:90vh}dialog::backdrop{background:#18312866;backdrop-filter:blur(3px)}.modal-head{padding:22px 25px 17px;display:flex;justify-content:space-between;align-items:center;gap:10px;border-bottom:1px solid var(--line)}.modal-head h2{margin:0;font-size:19px;letter-spacing:-.4px}.close{background:#f1f4ec;border-radius:50%;width:28px;height:28px;display:grid;place-items:center;color:var(--muted)}.close svg{width:15px}.modal-body{padding:21px 25px;overflow:auto;max-height:64vh}.modal-body p,.modal-body li{font-size:13px;line-height:1.8}.modal-body h3{font-size:14px;margin:19px 0 5px}.modal-body h3:first-child{margin-top:0}.modal-body ol{padding-left:20px}.modal-body li{padding:0 0 7px 4px}.modal-actions{border-top:1px solid var(--line);padding:16px 25px;display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap}.modal-body textarea{border:1px solid var(--line);border-radius:7px;width:100%;padding:13px;resize:vertical;font-size:13px;line-height:1.9;color:var(--ink);background:#fcfdf9}.preview-bar{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:13px;font-size:11px;color:var(--muted)}.preview-bar select{border:1px solid var(--line);border-radius:5px;background:white;padding:6px 9px;color:var(--ink);font-size:11px}.modal-hint{font-size:11px!important;color:var(--muted);margin:10px 0 0}.help-link{color:var(--green);text-underline-offset:3px}.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#243e32;color:#fff;border:1px solid #ffffff20;padding:12px 18px;border-radius:9px;font-size:12px;box-shadow:0 8px 30px #0002;z-index:5;max-width:calc(100% - 30px);display:flex;gap:16px;align-items:center}.toast[hidden]{display:none}.toast button{background:transparent;color:#e7cf9b;font-size:12px;white-space:nowrap}.sr-only{position:absolute;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}.mobile-switch{display:none}.mobile-top{display:none}@media(min-width:1550px){.workspace{padding:40px 50px}.columns{gap:28px}.sentence{font-size:13px}.sentence-fields{font-size:13px}}@media(max-width:1100px){.sidebar{padding:25px 12px}.app{grid-template-columns:190px minmax(0,1fr)}.workspace{padding:26px 20px}.columns{gap:14px}.category{font-size:11px}.library-tools,.draft-head{padding:16px}.sentence{padding:11px 7px;font-size:11px}.sentence-fields{font-size:11px}.detail-input{font-size:11px}.library-heading{padding:16px}.draft-item{padding:13px}}@media(max-width:850px){.app{display:block}.sidebar{display:none}.workspace{padding:21px 16px;max-width:650px;margin:auto}.mobile-top{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--green);font-weight:650;margin-bottom:22px}.mobile-top svg{width:16px}.topline{margin-bottom:12px}.topline .eyebrow{font-size:9px}.small-btn{font-size:10px;padding:6px 8px}.small-btn svg{height:14px;width:14px}h1{font-size:26px;line-height:1.3;max-width:300px}.intro{font-size:12px;max-width:320px}.steps{gap:12px;flex-wrap:wrap;font-size:10px;margin-top:15px}.page-head{margin-bottom:20px}.columns{display:block}.mobile-categories{display:block;margin-bottom:13px}.mobile-categories select{width:100%;padding:11px 12px;border:1px solid var(--line);background:white;border-radius:7px;font-size:12px;color:var(--ink)}.mobile-switch{display:flex;gap:0;background:#e6ece1;border-radius:7px;padding:3px;margin-bottom:13px}.mobile-switch button{background:transparent;padding:9px;border-radius:5px;flex:1;font-size:12px;color:var(--muted)}.mobile-switch button.active{background:white;color:var(--green);box-shadow:0 1px 4px #0001}.panel{display:none}.panel.mobile-active{display:block}.sentence-list{max-height:none;min-height:200px}.draft-scroll{max-height:none;min-height:250px}.sentence{font-size:12px;padding:14px 8px}.sentence-fields{font-size:13px}.detail-input{font-size:13px}.footer{font-size:9px;align-items:start}.footer>span{max-width:240px}.modal-head{padding:18px}.modal-body{padding:18px}.modal-actions{padding:14px 18px}.toast{bottom:15px}.under-note{font-size:10px}.draft-item{padding:15px}.output-actions{position:sticky;bottom:10px}.library-tools{padding:15px}.draft-head{padding:18px}.library-heading{padding:17px 16px}.mobile-draft-count{font-size:10px;margin-left:3px}.side-bottom a{display:none}}@media print{body{background:white}.app,.toast,dialog:not([open]),.modal-head,.modal-actions,.preview-bar,.modal-hint{display:none!important}dialog[open]{display:block;position:static;border:none;box-shadow:none;width:100%;max-width:none;max-height:none}dialog::backdrop{display:none}.modal-body{max-height:none;overflow:visible;padding:0}.print-note{display:block!important;white-space:pre-wrap;font-size:12pt;line-height:1.7}.modal-body textarea{display:none}.modal-body:before{content:'Home Health Nursing Narrative';display:block;font-weight:bold;font-size:16pt;margin-bottom:20px}}.print-note{display:none}
+</style>
+</head>
+<body>
+<div class="app">
+ <aside class="sidebar" aria-label="Sentence categories">
+  <div class="brand"><span class="brandmark" data-icon="cross"></span><div><strong>Visit Notes</strong><small>Home health</small></div></div>
+  <div class="eyebrow">Sentence library</div><nav id="categories" class="categories"></nav>
+  <div class="side-bottom"><div class="private-indicator"><span data-icon="lock"></span> A fresh note, every visit</div><p>Your draft stays in this tab.<br>Copy your note before closing.</p><a href="./index.html" download="Home_Health_Narrative_Builder.html">Download this app ↗</a></div>
+ </aside>
+ <main class="workspace">
+  <div class="mobile-top"><span data-icon="cross"></span> Visit Notes <span style="color:#a0aa9e;font-weight:400">/ Home health</span></div>
+  <header class="page-head"><div class="topline"><span class="eyebrow">Your nursing documentation workspace</span><button class="small-btn" id="how-button"><span data-icon="help"></span> How it works</button></div><h1>Build your visit narrative</h1><p class="intro">The words you need, ready to make your own.</p><div class="steps"><span><i>1</i> Choose your sentences</span><span><i>2</i> Add visit details</span><span><i>3</i> Review and copy</span></div></header>
+  <div class="mobile-switch" aria-label="Builder view"><button id="library-tab" class="active" aria-pressed="true">Sentence library</button><button id="draft-tab" aria-pressed="false">Your narrative <span id="mobile-count" class="mobile-draft-count">0</span></button></div>
+  <div class="mobile-categories"><label class="sr-only" for="category-select">Sentence category</label><select id="category-select"></select></div>
+  <div class="columns">
+   <section id="library-panel" class="panel mobile-active" aria-labelledby="library-title">
+    <div class="library-tools"><div class="search"><span data-icon="search"></span><label class="sr-only" for="search">Search all sentences</label><input id="search" type="search" placeholder="Search all sentences… e.g. pain, dressing" autocomplete="off"><button id="search-clear" class="search-clear" aria-label="Clear search" hidden>×</button></div></div>
+    <div class="library-heading"><div><h2 id="library-title">Routine visit</h2><p id="library-description"></p></div><span id="library-count" class="total-pill"></span></div>
+    <div id="sentence-list" class="sentence-list"></div>
+   </section>
+   <section id="draft-panel" class="panel" aria-labelledby="draft-title">
+    <div class="draft-head"><div class="draft-title"><h2 id="draft-title">Your narrative <span id="draft-count" class="badge">0</span></h2><button id="clear-button" class="text-button" disabled>Clear all</button></div><div class="draft-sub">Add what applies. Leave out what doesn’t.</div></div>
+    <div id="draft-list" class="draft-scroll"></div>
+    <div class="draft-bottom"><button id="custom-button" class="add-custom"><span data-icon="plus"></span> Add your own sentence</button><div class="note-stats"><span id="word-count">0 words</span><span id="blank-count">No sentences yet</span></div><div class="output-actions"><button id="preview-button" class="secondary" disabled>Review &amp; edit</button><button id="copy-button" class="primary" disabled><span data-icon="copy"></span> Copy narrative</button></div><p class="under-note">Nothing saves automatically. Copy into your approved charting system.</p></div>
+   </section>
+  </div>
+  <footer class="footer"><span>Based on your Home Health Nursing Narrative Reference Guide.</span><button id="homebound-button">Homebound reference</button></footer>
+ </main>
+</div>
+<dialog id="preview-dialog" aria-labelledby="preview-title"><div class="modal-head"><h2 id="preview-title">Review your narrative</h2><button class="close" data-close aria-label="Close review" data-icon="x"></button></div><div class="modal-body"><div class="preview-bar"><label for="paragraph-style">Paragraph format <select id="paragraph-style"><option value="single">One paragraph</option><option value="section">By sentence category</option><option value="line">One sentence per line</option></select></label><span id="preview-stats"></span></div><label class="sr-only" for="final-note">Editable final narrative</label><textarea id="final-note" rows="12" spellcheck="true"></textarea><div class="print-note" id="print-note"></div><p class="modal-hint" id="preview-hint">Edit the finished note here. Changing your sentence cards will rebuild this preview.</p></div><div class="modal-actions"><button id="download-note" class="secondary">Download .txt</button><button id="print-note-button" class="secondary">Print</button><button id="copy-final" class="primary"><span data-icon="copy"></span> Copy final note</button></div></dialog>
+<dialog id="edit-dialog" aria-labelledby="edit-title"><div class="modal-head"><h2 id="edit-title">Add your own sentence</h2><button class="close" data-close aria-label="Close sentence editor" data-icon="x"></button></div><div class="modal-body"><label for="custom-text">Sentence or paragraph</label><textarea id="custom-text" rows="5" placeholder="Type your wording. Use ____ anywhere you want a fill-in blank."></textarea><p class="modal-hint">Use four underscores (____) to create an editable blank.</p></div><div class="modal-actions"><button class="secondary" data-close>Cancel</button><button id="save-custom" class="primary">Add sentence</button></div></dialog>
+<dialog id="clear-dialog" aria-labelledby="clear-title"><div class="modal-head"><h2 id="clear-title">Start a fresh narrative?</h2><button class="close" data-close aria-label="Cancel clearing" data-icon="x"></button></div><div class="modal-body"><p>This clears the current sentences, visit details, and final-note edits. Copy your narrative first if you need it.</p></div><div class="modal-actions"><button class="secondary" data-close>Keep working</button><button id="confirm-clear" class="primary">Clear narrative</button></div></dialog>
+<dialog id="help-dialog" aria-labelledby="help-title"><div class="modal-head"><h2 id="help-title">A note that sounds like you</h2><button class="close" data-close aria-label="Close help" data-icon="x"></button></div><div class="modal-body"><ol><li><strong>Pick a category or search.</strong> Click a sentence to add it. Click it again if you need another copy.</li><li><strong>Fill in the green blanks.</strong> Use the arrows to change sentence order. The pencil lets you change the wording.</li><li><strong>Review &amp; edit.</strong> Read the combined note and make any final changes. Copy or download the text when you’re ready.</li></ol><h3>Make it match the visit</h3><p>Choose only findings, care, and teaching that actually occurred. Separate your observations from patient or caregiver reports. Blank spaces remain as underscores until completed.</p><h3>Your working draft</h3><p>Drafts stay in browser memory in this tab. They aren’t saved by the app and will be lost when this page is refreshed or closed. Clear the narrative between patients.</p><h3>Use it on your own website</h3><p><a class="help-link" href="./index.html" download="Home_Health_Narrative_Builder.html">Download the standalone app</a>. It works as one HTML file that you can open in a browser or upload to a static website host.</p></div><div class="modal-actions"><button class="primary" data-close>Got it</button></div></dialog>
+<dialog id="homebound-dialog" aria-labelledby="homebound-title"><div class="modal-head"><h2 id="homebound-title">Homebound documentation reference</h2><button class="close" data-close aria-label="Close homebound reference" data-icon="x"></button></div><div class="modal-body"><h3>Connect the condition to the limitation</h3><p>For Medicare, illness or injury must create a need for a device, another person, or special transportation to leave home, or make leaving medically inadvisable. The patient must also normally be unable to leave, and leaving must require considerable effort.</p><h3>Include the supporting details</h3><p>Document distance, device, assistance level, symptoms with activity, rest breaks, recovery time, steps, and transfer difficulty. A diagnosis or “taxing effort” alone is insufficient.</p><h3>Common supporting limitations</h3><p>Weakness, poor endurance, impaired balance, shortness of breath, limiting pain, activity restrictions, transfer difficulty, neurological impairment, confusion, severe vision impairment, and severe psychiatric symptoms may contribute when they cause the actual difficulty leaving.</p><p>Medical appointments, religious services, and some brief or infrequent outings can be consistent with homebound status. A walker, oxygen, age, a wound, or lack of transportation alone does not establish eligibility.</p><p class="modal-hint">From your reference guide, checked November 14, 2026. <a class="help-link" href="https://www.cms.gov/training-education/medicare-learning-networkr-mln/compliance/medicare-provider-compliance-tips/home-health-services" target="_blank" rel="noopener noreferrer">CMS home health criteria ↗</a></p></div><div class="modal-actions"><button id="show-homebound" class="primary">Browse homebound sentences</button></div></dialog>
+<div id="toast" class="toast" role="status" aria-live="polite" hidden><span id="toast-text"></span><button id="undo-button" hidden>Undo</button></div>
+<script id="sentence-bank" type="application/json">[
+  {
+    "id": "routine",
+    "title": "Routine visit",
+    "description": "Common sentences to open, describe, and close a visit.",
+    "sentences": [
+      {
+        "id": "routine-0",
+        "text": "Skilled nursing visit completed for assessment, education, and management of __________."
+      },
+      {
+        "id": "routine-1",
+        "text": "Patient found __________ upon arrival."
+      },
+      {
+        "id": "routine-2",
+        "text": "Patient alert and oriented to __________."
+      },
+      {
+        "id": "routine-3",
+        "text": "Patient/caregiver reports __________ since the previous visit."
+      },
+      {
+        "id": "routine-4",
+        "text": "Vital signs obtained and recorded. Notable findings include __________."
+      },
+      {
+        "id": "routine-5",
+        "text": "Patient reports pain to __________, rated __________/10."
+      },
+      {
+        "id": "routine-6",
+        "text": "Pain management measures reviewed. Patient reports __________ relief."
+      },
+      {
+        "id": "routine-7",
+        "text": "Respirations __________ at rest. Patient reports __________ with activity."
+      },
+      {
+        "id": "routine-8",
+        "text": "Edema noted to __________."
+      },
+      {
+        "id": "routine-9",
+        "text": "Patient reports appetite __________, fluid intake __________, and last bowel movement __________."
+      },
+      {
+        "id": "routine-10",
+        "text": "Patient reports __________ regarding falls, medication changes, and emergency room visits or hospitalizations since the last visit."
+      },
+      {
+        "id": "routine-11",
+        "text": "Medications reviewed with patient/caregiver. Discrepancies or concerns include __________."
+      },
+      {
+        "id": "routine-12",
+        "text": "Patient requires assistance with __________ due to __________."
+      },
+      {
+        "id": "routine-13",
+        "text": "Wound assessed to __________. Findings include __________."
+      },
+      {
+        "id": "routine-14",
+        "text": "Wound care completed per orders. Patient response: __________."
+      },
+      {
+        "id": "routine-15",
+        "text": "Education provided regarding __________."
+      },
+      {
+        "id": "routine-16",
+        "text": "Patient/caregiver demonstrated understanding by __________."
+      },
+      {
+        "id": "routine-17",
+        "text": "Reinforcement needed regarding __________."
+      },
+      {
+        "id": "routine-18",
+        "text": "__________ notified of __________. Instructions/orders received: __________."
+      },
+      {
+        "id": "routine-19",
+        "text": "Patient left __________ with __________ within reach."
+      },
+      {
+        "id": "routine-20",
+        "text": "Plan for next visit includes __________."
+      }
+    ]
+  },
+  {
+    "id": "assessment",
+    "title": "Patient assessment",
+    "description": "Symptoms, daily function, medications, and changes since the last visit.",
+    "sentences": [
+      {
+        "id": "assessment-0",
+        "text": "Patient observed sitting/lying __________ and appeared __________ upon arrival."
+      },
+      {
+        "id": "assessment-1",
+        "text": "Patient reports feeling __________ today compared with the previous visit."
+      },
+      {
+        "id": "assessment-2",
+        "text": "Patient denies new concerns at this visit."
+      },
+      {
+        "id": "assessment-3",
+        "text": "Patient/caregiver reports new or worsening __________ beginning __________."
+      },
+      {
+        "id": "assessment-4",
+        "text": "Patient able to communicate needs and participate in care with __________ assistance."
+      },
+      {
+        "id": "assessment-5",
+        "text": "Patient/caregiver reports no falls, emergency room visits, hospitalizations, or medication changes since the previous visit."
+      },
+      {
+        "id": "assessment-6",
+        "text": "Breath sounds __________. Respiratory effort __________."
+      },
+      {
+        "id": "assessment-7",
+        "text": "Patient reports shortness of breath with __________, relieved by __________."
+      },
+      {
+        "id": "assessment-8",
+        "text": "Oxygen at __________ via __________ per orders; oxygen saturation __________% on __________."
+      },
+      {
+        "id": "assessment-9",
+        "text": "Edema present to __________, described as __________. Change since previous visit: __________."
+      },
+      {
+        "id": "assessment-10",
+        "text": "Patient reports pain is __________ and interferes with __________."
+      },
+      {
+        "id": "assessment-11",
+        "text": "Comfort measures provided included __________. Patient response was __________."
+      },
+      {
+        "id": "assessment-12",
+        "text": "Patient reports appetite __________ and oral intake __________."
+      },
+      {
+        "id": "assessment-13",
+        "text": "Last bowel movement reported as __________. Patient reports __________ regarding bowel concerns."
+      },
+      {
+        "id": "assessment-14",
+        "text": "Patient reports __________ regarding urination, discomfort, frequency, or changes in urine."
+      },
+      {
+        "id": "assessment-15",
+        "text": "Blood glucose __________ mg/dL, obtained by __________ at __________; symptoms reported/observed: __________."
+      },
+      {
+        "id": "assessment-16",
+        "text": "Skin observed to be __________. Areas of concern include __________."
+      },
+      {
+        "id": "assessment-17",
+        "text": "Patient ambulates with __________ and requires __________ assistance due to __________."
+      },
+      {
+        "id": "assessment-18",
+        "text": "Patient requires __________ assistance with transfers and __________ with daily activities."
+      },
+      {
+        "id": "assessment-19",
+        "text": "Patient reports fatigue with __________ and requires __________ rest periods."
+      },
+      {
+        "id": "assessment-20",
+        "text": "Patient/caregiver reports taking medications __________. Barriers or concerns include __________."
+      },
+      {
+        "id": "assessment-21",
+        "text": "Patient reports __________ following recent medication change to __________."
+      },
+      {
+        "id": "assessment-22",
+        "text": "Patient response to today's care was __________. Unresolved concerns include __________."
+      },
+      {
+        "id": "assessment-23",
+        "text": "Patient left in __________ position with __________ present and needed items within reach."
+      }
+    ]
+  },
+  {
+    "id": "wounds",
+    "title": "Wound care",
+    "description": "Wound findings, measurements, dressing changes, and patient response.",
+    "sentences": [
+      {
+        "id": "wounds-0",
+        "text": "Wound to __________ assessed. Wound type/established diagnosis: __________."
+      },
+      {
+        "id": "wounds-1",
+        "text": "Wound measures __________ cm long × __________ cm wide × __________ cm deep."
+      },
+      {
+        "id": "wounds-2",
+        "text": "Wound bed consists of approximately __________% __________ tissue and __________% __________ tissue."
+      },
+      {
+        "id": "wounds-3",
+        "text": "Wound edges are __________. Surrounding skin is __________."
+      },
+      {
+        "id": "wounds-4",
+        "text": "Drainage is __________ in amount, __________ in color, and __________ in consistency."
+      },
+      {
+        "id": "wounds-5",
+        "text": "Odor noted __________ before cleansing and __________ after cleansing."
+      },
+      {
+        "id": "wounds-6",
+        "text": "Tunneling noted at __________ o'clock, measuring __________ cm; undermining extends from __________ to __________ o'clock, measuring up to __________ cm."
+      },
+      {
+        "id": "wounds-7",
+        "text": "Wound pain rated __________/10 before care and __________/10 after care."
+      },
+      {
+        "id": "wounds-8",
+        "text": "Compared with previous documented findings, wound __________ as evidenced by __________."
+      },
+      {
+        "id": "wounds-9",
+        "text": "Incision to __________ has __________ approximation with __________ drainage. Closure material observed: __________."
+      },
+      {
+        "id": "wounds-10",
+        "text": "Observed wound concerns include __________. Patient reports __________."
+      },
+      {
+        "id": "wounds-11",
+        "text": "Existing dressing removed. Dressing condition and drainage noted as __________."
+      },
+      {
+        "id": "wounds-12",
+        "text": "Wound cleansed with __________ per orders using __________ technique."
+      },
+      {
+        "id": "wounds-13",
+        "text": "__________ applied to wound bed; surrounding skin protected with __________ per orders."
+      },
+      {
+        "id": "wounds-14",
+        "text": "Wound packed with __________ per orders; __________ removed and __________ placed, documented according to agency policy."
+      },
+      {
+        "id": "wounds-15",
+        "text": "Wound covered with __________ and secured with __________ per orders."
+      },
+      {
+        "id": "wounds-16",
+        "text": "Ordered wound care completed. Patient tolerated care __________ with __________."
+      },
+      {
+        "id": "wounds-17",
+        "text": "Treatment could not be completed as ordered due to __________. Actions taken and follow-up: __________."
+      },
+      {
+        "id": "wounds-18",
+        "text": "Patient declined __________ after explanation. Reason given: __________. Follow-up: __________."
+      },
+      {
+        "id": "wounds-19",
+        "text": "Patient/caregiver reports dressing remained __________ between visits."
+      },
+      {
+        "id": "wounds-20",
+        "text": "Wound care supplies reviewed; additional supplies needed: __________."
+      },
+      {
+        "id": "wounds-21",
+        "text": "Patient/caregiver able to complete __________ steps of wound care; assistance needed with __________."
+      },
+      {
+        "id": "wounds-22",
+        "text": "Continued skilled wound care needed for __________ because __________."
+      }
+    ]
+  },
+  {
+    "id": "teaching",
+    "title": "Teaching and response",
+    "description": "Verbal or written teaching, teach-back, and return demonstrations.",
+    "sentences": [
+      {
+        "id": "teaching-0",
+        "text": "Skilled nurse provided verbal education to patient/caregiver regarding __________."
+      },
+      {
+        "id": "teaching-1",
+        "text": "Written education on __________ provided to patient/caregiver and reviewed during the visit."
+      },
+      {
+        "id": "teaching-2",
+        "text": "Verbal and written instructions provided regarding __________, including __________."
+      },
+      {
+        "id": "teaching-3",
+        "text": "Education reinforced regarding __________ due to __________."
+      },
+      {
+        "id": "teaching-4",
+        "text": "Skilled nurse demonstrated __________ and reviewed each step with patient/caregiver."
+      },
+      {
+        "id": "teaching-5",
+        "text": "Written instructions left __________ for patient/caregiver reference."
+      },
+      {
+        "id": "teaching-6",
+        "text": "Education provided using __________ to accommodate __________."
+      },
+      {
+        "id": "teaching-7",
+        "text": "Teaching completed with __________ interpreter, identifier __________, regarding __________."
+      },
+      {
+        "id": "teaching-8",
+        "text": "Caregiver __________ present and included in teaching regarding __________."
+      },
+      {
+        "id": "teaching-9",
+        "text": "Patient/caregiver verbalized understanding of __________."
+      },
+      {
+        "id": "teaching-10",
+        "text": "Using teach-back, patient/caregiver correctly explained __________."
+      },
+      {
+        "id": "teaching-11",
+        "text": "Patient/caregiver identified __________ symptoms to report and stated whom to contact."
+      },
+      {
+        "id": "teaching-12",
+        "text": "Patient/caregiver demonstrated __________ correctly without prompting."
+      },
+      {
+        "id": "teaching-13",
+        "text": "Patient/caregiver completed return demonstration of __________ with __________ cues or assistance."
+      },
+      {
+        "id": "teaching-14",
+        "text": "Patient/caregiver correctly described medication purpose, dose, schedule, and __________ precautions reviewed today."
+      },
+      {
+        "id": "teaching-15",
+        "text": "Patient/caregiver asked questions regarding __________; questions addressed by __________."
+      },
+      {
+        "id": "teaching-16",
+        "text": "Patient/caregiver able to explain __________ but needs further teaching on __________."
+      },
+      {
+        "id": "teaching-17",
+        "text": "Patient/caregiver unable to teach back __________; topic re-explained using __________."
+      },
+      {
+        "id": "teaching-18",
+        "text": "Learning limited by __________. Teaching adapted by __________."
+      },
+      {
+        "id": "teaching-19",
+        "text": "Patient/caregiver declined education on __________, stating __________."
+      },
+      {
+        "id": "teaching-20",
+        "text": "Written material provided; review of understanding deferred due to __________. Follow-up planned for __________."
+      },
+      {
+        "id": "teaching-21",
+        "text": "Further teaching needed regarding __________ at the next visit."
+      },
+      {
+        "id": "teaching-22",
+        "text": "Patient/caregiver reports difficulty following __________ due to __________. Barriers addressed by __________."
+      }
+    ]
+  },
+  {
+    "id": "education",
+    "title": "Education topics",
+    "description": "Common teaching topics to individualize to the patient’s care plan.",
+    "sentences": [
+      {
+        "id": "education-0",
+        "text": "Educated patient/caregiver on __________ medication, including purpose, prescribed dose, schedule, and side effects to report."
+      },
+      {
+        "id": "education-1",
+        "text": "Reviewed symptoms of worsening __________ and the patient's action plan for __________."
+      },
+      {
+        "id": "education-2",
+        "text": "Reviewed daily weight monitoring, edema, breathing changes, and prescribed reporting instructions for __________."
+      },
+      {
+        "id": "education-3",
+        "text": "Reviewed prescribed sodium/fluid instructions of __________ and ways to follow these at home."
+      },
+      {
+        "id": "education-4",
+        "text": "Educated patient/caregiver on blood glucose monitoring, symptoms of low/high blood sugar, and the prescribed response plan for __________."
+      },
+      {
+        "id": "education-5",
+        "text": "Reviewed oxygen use at the prescribed setting, equipment safety, and avoiding smoking or open flames near oxygen."
+      },
+      {
+        "id": "education-6",
+        "text": "Verbal and written wound care instructions reviewed, including ordered cleansing, dressing materials, and dressing change schedule."
+      },
+      {
+        "id": "education-7",
+        "text": "Educated patient/caregiver on hand hygiene and avoiding contamination during dressing changes."
+      },
+      {
+        "id": "education-8",
+        "text": "Reviewed wound changes to report, including increasing redness, warmth, swelling, pain, drainage, odor, or fever."
+      },
+      {
+        "id": "education-9",
+        "text": "Reviewed instructions for a dressing that becomes wet, loose, or soiled: __________."
+      },
+      {
+        "id": "education-10",
+        "text": "Educated patient/caregiver on pressure relief, positioning, and offloading according to the care plan: __________."
+      },
+      {
+        "id": "education-11",
+        "text": "Reviewed nutrition and fluid recommendations supporting healing within the prescribed diet and restrictions."
+      },
+      {
+        "id": "education-12",
+        "text": "Educated patient/caregiver on fall prevention, use of prescribed assistive device, clear walkways, and requesting needed assistance."
+      },
+      {
+        "id": "education-13",
+        "text": "Reviewed safe transfers and position changes according to the patient's mobility plan: __________."
+      },
+      {
+        "id": "education-14",
+        "text": "Reviewed pacing activities, planned rest periods, and techniques taught for managing breathlessness."
+      },
+      {
+        "id": "education-15",
+        "text": "Reviewed bowel management measures and medications as prescribed, including __________."
+      },
+      {
+        "id": "education-16",
+        "text": "Educated patient/caregiver on catheter/ostomy care as ordered, including __________ and concerns to report."
+      },
+      {
+        "id": "education-17",
+        "text": "Reviewed whom to contact for changes in condition and when to call 911 for an emergency."
+      }
+    ]
+  },
+  {
+    "id": "homebound",
+    "title": "Homebound statements",
+    "description": "Reusable statements connecting limitations to the effort of leaving home.",
+    "sentences": [
+      {
+        "id": "homebound-0",
+        "text": "Patient normally unable to leave home due to __________ and requires __________ assistance. Leaving home requires considerable effort because __________."
+      },
+      {
+        "id": "homebound-1",
+        "text": "Patient requires __________ and assistance from another person to leave home due to __________."
+      },
+      {
+        "id": "homebound-2",
+        "text": "Ambulation limited by __________, requiring __________ and frequent rest periods."
+      },
+      {
+        "id": "homebound-3",
+        "text": "Patient develops __________ after walking approximately __________ feet and requires __________ to recover."
+      },
+      {
+        "id": "homebound-4",
+        "text": "Weakness and impaired balance require __________ assistance for safe ambulation outside the home."
+      },
+      {
+        "id": "homebound-5",
+        "text": "Patient requires assistance with transfers and negotiating __________ steps to exit the home."
+      },
+      {
+        "id": "homebound-6",
+        "text": "Pain to __________ limits walking and vehicle transfers, requiring __________ assistance."
+      },
+      {
+        "id": "homebound-7",
+        "text": "Cognitive impairment requires caregiver supervision to safely leave and return home."
+      },
+      {
+        "id": "homebound-8",
+        "text": "Ordered __________ restrictions limit the patient's ability to leave home and require __________."
+      }
+    ]
+  },
+  {
+    "id": "reasons",
+    "title": "Homebound reasons",
+    "description": "Functional examples of weakness, pain, breathing, cognition, and more.",
+    "sentences": [
+      {
+        "id": "reasons-0",
+        "text": "Weakness or deconditioning: Patient requires __________ assistance to rise from a chair and walk to the vehicle due to __________ weakness."
+      },
+      {
+        "id": "reasons-1",
+        "text": "Fatigue or limited endurance: Patient walks approximately __________ feet before needing __________ rest; leaving home requires __________ assistance and prolonged recovery."
+      },
+      {
+        "id": "reasons-2",
+        "text": "Unsteady gait or impaired balance: Patient requires __________ device and __________ assistance to safely manage turns, uneven ground, and __________ steps."
+      },
+      {
+        "id": "reasons-3",
+        "text": "Shortness of breath with activity: Patient becomes short of breath with __________ and requires __________ rest periods and __________ assistance to reach the vehicle."
+      },
+      {
+        "id": "reasons-4",
+        "text": "Pain limiting movement: Pain to __________ limits standing, weight-bearing, walking, or vehicle transfers; patient requires __________ assistance to leave home."
+      },
+      {
+        "id": "reasons-5",
+        "text": "Surgery fracture or injury: Ordered __________ activity/weight-bearing restrictions require __________ device and __________ assistance for leaving home."
+      },
+      {
+        "id": "reasons-6",
+        "text": "Difficulty with transfers: Patient requires __________ assistance for bed-to-wheelchair and wheelchair-to-vehicle transfers due to __________."
+      },
+      {
+        "id": "reasons-7",
+        "text": "Stroke or neurological impairment: __________ weakness/poor coordination limits safe ambulation; patient requires __________ and __________ assistance outside the home."
+      },
+      {
+        "id": "reasons-8",
+        "text": "Dementia or significant confusion: Patient becomes __________ outside the home and requires caregiver supervision to recognize hazards, navigate, and return safely."
+      },
+      {
+        "id": "reasons-9",
+        "text": "Severe vision impairment: Patient requires __________ guidance to manage doorways, steps, outdoor obstacles, and transportation due to __________."
+      },
+      {
+        "id": "reasons-10",
+        "text": "Severe psychiatric symptoms: Symptoms of __________ prevent safe independent outings as demonstrated by __________; patient requires __________ support to leave home."
+      }
+    ]
+  },
+  {
+    "id": "function",
+    "title": "Functional details",
+    "description": "Distance, rest breaks, steps, assistance, and recovery time.",
+    "sentences": [
+      {
+        "id": "function-0",
+        "text": "Patient requires __________ seated rest breaks when walking from __________ to __________."
+      },
+      {
+        "id": "function-1",
+        "text": "Patient unable to negotiate __________ steps without __________ due to __________."
+      },
+      {
+        "id": "function-2",
+        "text": "Patient requires __________ minutes to recover after __________ due to __________."
+      },
+      {
+        "id": "function-3",
+        "text": "Caregiver reports patient leaves home for __________ approximately __________ and requires __________ assistance."
+      },
+      {
+        "id": "function-4",
+        "text": "Patient reports leaving home results in __________ and requires __________ afterward."
+      },
+      {
+        "id": "function-5",
+        "text": "Observed __________ during ambulation supports need for __________ assistance to leave home safely."
+      }
+    ]
+  }
+]</script>
+<script>
+'use strict';
+const BANK=JSON.parse(document.getElementById('sentence-bank').textContent);
+const ICONS={cross:'<path d="M9 3h6v6h6v6h-6v6H9v-6H3V9h6z"/>',lock:'<rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/>',search:'<circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4 4"/>',plus:'<path d="M12 5v14M5 12h14"/>',check:'<path d="m5 12 4 4L19 6"/>',copy:'<rect x="8" y="8" width="12" height="13" rx="2"/><path d="M16 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h4"/>',help:'<circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 4 2c-1 .6-1.5 1-1.5 2.5M12 17h.01"/>',x:'<path d="m6 6 12 12M18 6 6 18"/>',up:'<path d="m6 14 6-6 6 6"/>',down:'<path d="m6 10 6 6 6-6"/>',edit:'<path d="m16 3 5 5-12 12-6 1 1-6zM13 6l5 5"/>',routine:'<path d="M8 4H5v17h14V4h-3M8 3h8v4H8zM8 12h8M8 16h5"/>',assessment:'<path d="M4 4v5a4 4 0 0 0 8 0V4M3 4h3M10 4h3M8 13v2a5 5 0 0 0 10 0v-1"/><circle cx="18" cy="11" r="3"/>',wounds:'<path d="m3 9 6-6 12 12-6 6zM7 13l6-6M11 17l6-6M11 9h.01M15 13h.01M9 11h.01M13 15h.01"/>',teaching:'<path d="M3 4h7a3 3 0 0 1 3 3v14a4 4 0 0 0-4-2H3zM13 7a3 3 0 0 1 3-3h5v15h-4a4 4 0 0 0-4 2"/>',education:'<path d="m2 8 10-5 10 5-10 5zM6 10v7c4 3 8 3 12 0v-7M22 8v8"/>',homebound:'<path d="m3 11 9-8 9 8M5 10v11h14V10M10 21v-7h4v7"/>',reasons:'<circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 17h.01"/>',function:'<path d="M4 19h4v-5h5V9h5V4h3M3 21h18"/>'};
+const $=id=>document.getElementById(id);
+const svg=name=>'<svg viewBox="0 0 24 24" aria-hidden="true">'+(ICONS[name]||ICONS.routine)+'</svg>';
+document.querySelectorAll('[data-icon]').forEach(el=>el.innerHTML=svg(el.dataset.icon));
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const templates=BANK.flatMap(c=>c.sentences.map(s=>({...s,category:c.id,categoryTitle:c.title})));
+let activeCategory='routine',draft=[],nextKey=1,mobileView='library',editKey=null,revision=0,previewRevision=-1,previewCache='',toastTimer,undoAction=null;
+const splitTemplate=text=>text.split(/_{4,}/g);
+const countBlanks=text=>(text.match(/_{4,}/g)||[]).length;
+function itemText(item){const parts=splitTemplate(item.text);return parts.map((p,i)=>p+(i<parts.length-1?(item.values[i]?.trim()||'__________'):'')).join('');}
+function buildNarrative(items,format='single') {let text='',last=null;items.forEach(item=>{if(text)text+=format==='line'?'\n':format==='section'&&last!==item.category?'\n\n':' ';text+=itemText(item);last=item.category;});return text;}
+function missingCount(){return draft.reduce((n,item)=>n+item.values.filter(v=>!v.trim()).length,0);}
+function words(text){return text.trim()?text.trim().split(/\s+/).length:0;}
+function touch(){revision++;updateStats();}
+function toast(message,undo=null){clearTimeout(toastTimer);$('toast-text').textContent=message;undoAction=undo;$('undo-button').hidden=!undo;$('toast').hidden=false;toastTimer=setTimeout(()=>$('toast').hidden=true,undo?8000:4200);}
+$('undo-button').onclick=()=>{if(undoAction){const action=undoAction;undoAction=null;action();}$('toast').hidden=true;};
+function renderCategories(){ $('categories').innerHTML=BANK.map(c=>'<button class="category '+(c.id===activeCategory?'active':'')+'" data-category="'+c.id+'" aria-pressed="'+(c.id===activeCategory)+'">'+svg(c.id)+'<span>'+esc(c.title)+'</span><span class="count">'+c.sentences.length+'</span></button>').join('');$('category-select').innerHTML=BANK.map(c=>'<option value="'+c.id+'" '+(c.id===activeCategory?'selected':'')+'>'+esc(c.title)+' · '+c.sentences.length+'</option>').join('');}
+function chooseCategory(id){activeCategory=id;$('search').value='';renderCategories();renderLibrary();$('sentence-list').scrollTop=0;}
+$('categories').onclick=e=>{const b=e.target.closest('[data-category]');if(b)chooseCategory(b.dataset.category);};
+$('category-select').onchange=e=>chooseCategory(e.target.value);
+function renderLibrary(){const query=$('search').value.trim().toLocaleLowerCase();const cat=BANK.find(c=>c.id===activeCategory);const matches=templates.filter(t=>query?query.split(/\s+/).every(term=>(t.text+' '+t.categoryTitle).toLocaleLowerCase().includes(term)):t.category===activeCategory);$('library-title').textContent=query?'Search results':cat.title;$('library-description').textContent=query?'Matching sentences from your entire reference guide.':cat.description;$('library-count').textContent=matches.length+(matches.length===1?' sentence':' sentences');$('search-clear').hidden=!query;$('sentence-list').innerHTML=matches.length?matches.map(t=>{const selected=draft.some(d=>d.templateId===t.id);return '<button class="sentence '+(selected?'selected':'')+'" data-sentence="'+t.id+'" aria-label="Add sentence: '+esc(t.text)+'"><span>'+(query?'<span class="result-cat">'+esc(t.categoryTitle)+'</span>':'')+esc(t.text).replace(/_{4,}/g,'<span class="blank-marker">_______</span>')+'</span><span class="plus">'+svg(selected?'check':'plus')+'</span></button>';}).join(''):'<div class="no-results">No matching sentences.<br>Try “wound,” “pain,” or “teaching.”</div>';}
+$('search').oninput=renderLibrary;$('search-clear').onclick=()=>{$('search').value='';renderLibrary();$('search').focus();};
+function addTemplate(id,quiet=false){const t=templates.find(t=>t.id===id);if(!t)return;draft.push({key:nextKey++,templateId:id,text:t.text,category:t.category,categoryTitle:t.categoryTitle,values:Array(countBlanks(t.text)).fill('')});touch();if(!quiet){renderDraft();renderLibrary();toast('Sentence added to your narrative.');}}
+$('sentence-list').onclick=e=>{const b=e.target.closest('[data-sentence]');if(b)addTemplate(b.dataset.sentence);};
+function renderDraft(){const target=$('draft-list');if(!draft.length){target.innerHTML='<div class="empty"><div class="empty-icon">'+svg('routine')+'</div><h3>Your note starts here</h3><p>Click a sentence from the library, then fill in the details from your visit.</p><div class="or">or start with a few blanks</div><div class="starters"><button class="starter" data-preset="routine">Routine visit</button><button class="starter" data-preset="wound">Wound visit</button></div></div>';}else{target.innerHTML=draft.map((item,index)=>{const parts=splitTemplate(item.text);let sentence='';parts.forEach((part,i)=>{sentence+=esc(part);if(i<parts.length-1){const value=item.values[i]||'';sentence+='<input class="detail-input '+(value?'filled':'')+'" data-key="'+item.key+'" data-field="'+i+'" value="'+esc(value)+'" placeholder="add detail" aria-label="Detail '+(i+1)+' for sentence '+(index+1)+': '+esc(item.text)+'" autocomplete="off" style="width:'+Math.min(34,Math.max(10,value.length+2))+'ch">';}});return '<article class="draft-item" data-item="'+item.key+'"><div class="item-top"><span class="item-number">'+String(index+1).padStart(2,'0')+'</span><span class="item-category">'+esc(item.categoryTitle)+'</span><div class="item-controls"><button class="icon-btn" data-action="up" data-key="'+item.key+'" aria-label="Move sentence '+(index+1)+' up" '+(index===0?'disabled':'')+'>'+svg('up')+'</button><button class="icon-btn" data-action="down" data-key="'+item.key+'" aria-label="Move sentence '+(index+1)+' down" '+(index===draft.length-1?'disabled':'')+'>'+svg('down')+'</button><button class="icon-btn" data-action="edit" data-key="'+item.key+'" aria-label="Edit wording of sentence '+(index+1)+'">'+svg('edit')+'</button><button class="icon-btn remove" data-action="remove" data-key="'+item.key+'" aria-label="Remove sentence '+(index+1)+'">'+svg('x')+'</button></div></div><div class="sentence-fields">'+sentence+'</div></article>';}).join('');}updateStats();}
+function updateStats(){const n=draft.length;const missing=missingCount();$('draft-count').textContent=n;$('mobile-count').textContent=n;$('word-count').textContent=words(buildNarrative(draft))+' words';$('blank-count').textContent=n?(missing?missing+' blank'+(missing===1?'':'s')+' to complete':'All blanks filled'):'No sentences yet';$('blank-count').className=missing?'blanks-badge':'';['clear-button','preview-button','copy-button'].forEach(id=>$(id).disabled=!n);}
+$('draft-list').oninput=e=>{if(!e.target.matches('.detail-input'))return;const item=draft.find(d=>d.key===Number(e.target.dataset.key));item.values[Number(e.target.dataset.field)]=e.target.value;e.target.style.width=Math.min(34,Math.max(10,e.target.value.length+2))+'ch';e.target.classList.toggle('filled',!!e.target.value);touch();};
+$('draft-list').onclick=e=>{const preset=e.target.closest('[data-preset]');if(preset){startPreset(preset.dataset.preset);return;}const b=e.target.closest('[data-action]');if(!b)return;const key=Number(b.dataset.key),index=draft.findIndex(d=>d.key===key);if(index<0)return;if(b.dataset.action==='edit'){openEditor(key);return;}if(b.dataset.action==='remove'){const removed=draft.splice(index,1)[0];touch();renderDraft();renderLibrary();toast('Sentence removed.',()=>{draft.splice(Math.min(index,draft.length),0,removed);touch();renderDraft();renderLibrary();});return;}const offset=b.dataset.action==='up'?-1:1;const to=index+offset;if(to<0||to>=draft.length)return;[draft[index],draft[to]]=[draft[to],draft[index]];touch();renderDraft();const moved=$('draft-list').querySelector('[data-action="'+b.dataset.action+'"][data-key="'+key+'"]');moved?.focus();};
+function startPreset(type){const ids=type==='wound'?['routine-0','routine-1','routine-3','wounds-0','wounds-1','wounds-4','wounds-12','wounds-13','wounds-15','wounds-16','routine-15','routine-16','routine-19']:['routine-1','routine-3','routine-4','routine-11','routine-15','routine-16','routine-19'];ids.forEach(id=>addTemplate(id,true));renderDraft();renderLibrary();toast('Visit outline added. Complete the blanks that apply.');}
+function openEditor(key=null){editKey=key;const item=draft.find(d=>d.key===key);$('edit-title').textContent=item?'Edit sentence wording':'Add your own sentence';$('save-custom').textContent=item?'Save wording':'Add sentence';$('custom-text').value=item?itemText(item):'';$('edit-dialog').showModal();setTimeout(()=>$('custom-text').focus(),0);}
+$('custom-button').onclick=()=>openEditor();$('save-custom').onclick=()=>{const text=$('custom-text').value.trim();if(!text){$('custom-text').focus();return;}if(editKey!==null){const item=draft.find(d=>d.key===editKey);if(item){item.text=text;item.values=Array(countBlanks(text)).fill('');}}else draft.push({key:nextKey++,templateId:null,text,category:'custom',categoryTitle:'Your wording',values:Array(countBlanks(text)).fill('')});touch();renderDraft();renderLibrary();$('edit-dialog').close();toast('Wording added to your narrative.');};
+function setMobileView(view){mobileView=view;['library','draft'].forEach(v=>{$(v+'-tab').classList.toggle('active',v===view);$(v+'-tab').setAttribute('aria-pressed',v===view);$(v+'-panel').classList.toggle('mobile-active',v===view);});document.querySelector('.mobile-categories').style.display=view==='draft'?'none':'';}
+$('library-tab').onclick=()=>setMobileView('library');$('draft-tab').onclick=()=>setMobileView('draft');
+function openPreview(){if(previewRevision!==revision){previewCache=buildNarrative(draft,$('paragraph-style').value);previewRevision=revision;}$('final-note').value=previewCache;updatePreview();$('preview-dialog').showModal();}
+function updatePreview(){$('preview-stats').textContent=words($('final-note').value)+' words';const remaining=countBlanks($('final-note').value);$('preview-hint').textContent=remaining?remaining+' blank'+(remaining===1?' remains':'s remain')+'. Complete the note before charting. Edits here are kept until sentence cards change.':'Edit the finished note here. Edits are kept until sentence cards change.';$('print-note').textContent=$('final-note').value;}
+$('preview-button').onclick=openPreview;$('final-note').oninput=()=>{previewCache=$('final-note').value;updatePreview();};
+$('paragraph-style').onchange=()=>{if($('final-note').value!==buildNarrative(draft,$('paragraph-style').dataset.previous||'single')&&!confirm('Changing the paragraph format rebuilds the note from your sentence cards and replaces final-note edits. Continue?')){$('paragraph-style').value=$('paragraph-style').dataset.previous||'single';return;}$('paragraph-style').dataset.previous=$('paragraph-style').value;previewCache=buildNarrative(draft,$('paragraph-style').value);$('final-note').value=previewCache;updatePreview();};
+async function copyText(text){if(!text.trim()){toast('Add a sentence before copying.');return;}try{await navigator.clipboard.writeText(text);}catch{const area=document.createElement('textarea');area.value=text;area.style.cssText='position:fixed;left:-9999px';const host=document.querySelector('dialog[open]')||document.body;host.appendChild(area);area.select();let ok=false;try{ok=document.execCommand('copy');}finally{area.remove();}if(!ok){openPreview();$('final-note').focus();$('final-note').select();toast('Select the note and use your device’s Copy command.');return;}}const blanks=countBlanks(text);toast(blanks?'Copied with '+blanks+' blank'+(blanks===1?'':'s')+' to complete.':'Narrative copied.');}
+$('copy-button').onclick=()=>copyText(previewRevision===revision?previewCache:buildNarrative(draft,$('paragraph-style').value));$('copy-final').onclick=()=>copyText($('final-note').value);
+$('download-note').onclick=()=>{const blob=new Blob([$ ('final-note').value],{type:'text/plain;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='Home_Health_Narrative.txt';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);toast('Narrative downloaded as a text file.');};
+$('print-note-button').onclick=()=>{updatePreview();window.print();};
+$('clear-button').onclick=()=>$('clear-dialog').showModal();$('confirm-clear').onclick=()=>{draft=[];previewCache='';previewRevision=-1;$('final-note').value='';$('custom-text').value='';$('print-note').textContent='';touch();renderDraft();renderLibrary();$('clear-dialog').close();toast('Fresh narrative ready.');};
+$('how-button').onclick=()=>$('help-dialog').showModal();$('homebound-button').onclick=()=>$('homebound-dialog').showModal();$('show-homebound').onclick=()=>{$('homebound-dialog').close();chooseCategory('homebound');setMobileView('library');};
+document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>b.closest('dialog').close());document.querySelectorAll('dialog').forEach(d=>d.addEventListener('click',e=>{if(e.target!==d)return;const r=d.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)d.close();}));
+window.addEventListener('beforeunload',e=>{if(draft.length){e.preventDefault();e.returnValue='';}});
+renderCategories();renderLibrary();renderDraft();
+</script>
+</body>
+</html>
